@@ -16,7 +16,7 @@ mongoose.connect(URL,{
 const DB =mongoose.connection
 
 DB.on('connected',()=>{
-console.log("database is connected")
+console.log("database is connected",URL)
 
 
 })
