@@ -4,7 +4,14 @@ dotenv.config()
 
 const URL = process.env.AtlasDb
 
-mongoose.connect(URL)
+mongoose.connect(URL,{
+
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    bufferCommands: false,  
+    serverSelectionTimeoutMS: 5000,
+
+}).catch(err => console.log(err));
 
 const DB =mongoose.connection
 
