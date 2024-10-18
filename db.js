@@ -1,36 +1,36 @@
-import mongoose  from 'mongoose'
-import dotenv from 'dotenv'
-dotenv.config()
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+dotenv.config();
 
-const URL = process.env.AtlasDb
+const URL = process.env.AtlasDb;
 
-mongoose.connect(URL,{
+async function connectDB() {
+  try {
+    await mongoose.connect(URL, {
+      bufferCommands: false,
+      serverSelectionTimeoutMS: 5000,
+    });
 
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    bufferCommands: false,  
-    serverSelectionTimeoutMS: 5000,
+    console.log("Database connected successfully");
+  } catch (err) {
+    console.error("Error connecting to MongoDB:", err);
+  }
+}
 
-}).catch(err => console.log(err));
+const DB = mongoose.connection;
 
-const DB =mongoose.connection
+DB.on('connected', () => {
+  console.log("Database is connected");
+});
 
-DB.on('connected',()=>{
-console.log("database is connected",URL)
+DB.on('disconnected', () => {
+  console.log("Database is disconnected");
+});
 
+DB.on('error', (error) => {
+  console.error("Error in connecting to MongoDB:", error);
+});
 
-})
+await connectDB(); // Ensures mongoose.connect() is awaited in the correct context
 
-DB.on('disconnected',()=>{
-console.log("database is disconnected")
-
-
-})
-
-DB.on('error',()=>{
-console.log("error in connecting")
-
-
-})
-export default DB
-
+export default DB;
